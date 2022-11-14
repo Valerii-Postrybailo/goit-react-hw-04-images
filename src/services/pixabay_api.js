@@ -9,11 +9,11 @@ export const loadImage = async (query, page) => {
     const images = response.data.hits.map(img => {
       // console.log(images)
         const {id, largeImageURL, webformatURL, tags } = img;
-        return {
-          id,
-          largeImageURL,
-          webformatURL,
-          tags,
+          return {
+            id,
+            largeImageURL,
+            webformatURL,
+            tags,
         }})
     return images;
 };
