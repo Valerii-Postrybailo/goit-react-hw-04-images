@@ -1,38 +1,70 @@
-import { Component } from "react"
+import React from "react"
+import { useEffect } from "react";
 import PropTypes from "prop-types";
 import { createPortal } from "react-dom"
 import { ModalOvarlay, ModalWindow} from "./Modal.styled";
 
 const modalReact = document.querySelector("#modal-root")
 
-export default class Modal extends Component{
+export default function Modal ({onClose, url}) {
 
-  componentDidMount(){
-    window.addEventListener("keydown", this.handleKeyDown)
-  }
+  // componentDidMount(){
+  //   window.addEventListener("keydown", this.handleKeyDown)
+  // }
 
-  componentWillUnmount(){
-    window.removeEventListener("keydown", this.handleKeyDown)
-  }
+  // componentWillUnmount(){
+  //   window.removeEventListener("keydown", this.handleKeyDown)
+  // }
 
-  handleKeyDown = evt =>{
-    if(evt.code === "Escape"){
-      this.props.onClose()
+  useEffect(() => {
+    const handleKeyDown = evt =>{
+      if(evt.code === "Escape"){
+        onClose()
+      }
     }
-  }
 
-  handleBackdropClick = evt => {
+    // handleBackdropClick();
+
+    window.addEventListener("keydown", handleKeyDown)
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown)
+    }
+  },[onClose])
+  
+  // const handleKeyDown = evt =>{
+  //   if(evt.code === "Escape"){
+  //     onClose()
+  //   }
+  // }
+
+  const handleBackdropClick = evt => {
+    console.log(evt)
     if(evt.currentTarget === evt.target){
-      this.props.onClose()
+      onClose()
     }
   }
   
+  
+  // useEffect(() => {
+  //   const onTap = (event) => {
+  //       if (event.code === "Escape") {
+  //     onCloseModal();
+  //   }
+  // };
+      
+  //   window.addEventListener("keydown", onTap);
+  
+  //   return () => {
+  //     window.removeEventListener("keydown", onTap);
+  //   };
+  // }, [this.props.onClose()]);
 
-  render(){
+  
     return createPortal(
-      <ModalOvarlay onClick = {this.handleBackdropClick}>
+      <ModalOvarlay onClick = {handleBackdropClick}>
         <ModalWindow >
-          <img src={this.props.url} alt=""
+          <img src={url} alt=""
             style={{width:"900px"}}
           />
         </ModalWindow>
@@ -40,7 +72,6 @@ export default class Modal extends Component{
       modalReact
     )
   }
-}
 
 Modal.propTypes = {
   onClose: PropTypes.func.isRequired,
